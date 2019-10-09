@@ -95,8 +95,12 @@ Sensors::Sensors()
 
     // Require all the old HAL APIs to be present except for injection, which
     // is considered optional.
-    CHECK_GE(getHalDeviceVersion(), SENSORS_DEVICE_API_VERSION_1_3);
 
+#ifdef MTK_HARDWARE
+    CHECK_GE(getHalDeviceVersion(), SENSORS_DEVICE_API_VERSION_1_0);
+#else
+    CHECK_GE(getHalDeviceVersion(), SENSORS_DEVICE_API_VERSION_1_3);
+#endif
     if (getHalDeviceVersion() == SENSORS_DEVICE_API_VERSION_1_4) {
         if (mSensorDevice->inject_sensor_data == nullptr) {
             LOG(ERROR) << "HAL specifies version 1.4, but does not implement inject_sensor_data()";
